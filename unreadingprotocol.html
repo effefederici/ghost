@@ -12,12 +12,12 @@
 <section class="guide"><details><summary>PERFORMANCE SCORE / DOCUMENTATION (click to expand; hidden in fullscreen)</summary><p>Read aloud yourself. Press SPACE at the indicated spoken cues. The interface is a fictional measurement apparatus; its readings are poetic, not physical measurements. Press ← to go back, R to reset, F for fullscreen. On Zoom, share this browser window or screen. Disable notification popups. Place asemic.png beside this HTML file. Click AUDIO: OFF to enable browser audio before performing; share computer audio in Zoom. TEXTURE toggles CRT noise and oscilloscope effects. Stage 07 keeps its deliberately silent audio, with a nearly flat oscilloscope trace and occasional failed lock-on spikes. Stage 08 introduces fragmented multilingual synthetic speech if audio is enabled. Keep your computer output volume moderate; test the mix with a listener.</p><pre id="score"></pre><p>Authored for live performance. All graphics and transitions run locally, without network requests or microphone access. Final stage uses browser speech synthesis, with available voices varying by system.</p></details></section>
 <script>
 const steps=[
-{title:'CALIBRATION',cue:'Before: “This is not a poem.”',glyph:'∅',signal:'UNDETERMINED',source:'NOT FOUND',residue:'0.000',status:'STANDBY',log:'Instrument awaiting language.'},
-{title:'MEASUREMENT',cue:'At: “This is a measurement.”',glyph:'│  ─  │  ─  ∅  ─  │',signal:'0.000 ± ∞',source:'SENTENCE',residue:'0.001',status:'MEASURING',log:'Sentence without measurable boundaries.'},
-{title:'DETECTION',cue:'At: “We have detected a signal.”',glyph:'SIGNAL\n    / / /\nSOURCE ?',signal:'PRESENT',source:'ABSENT',residue:'0.013',status:'OBSERVING',log:'Signal detected; source unresolved.'},
-{title:'CONTRADICTION',cue:'At: “We have detected a source.”',glyph:'S I G N\nS I G H\nS S S S',signal:'LOST',source:'PRESENT',residue:'0.089',status:'UNSTABLE',log:'Source detected after signal loss.'},
-{title:'UNPRONOUNCEABLE',cue:'At: “The following characters cannot be pronounced.”',glyph:'⫷  ∿  ⟟  ╳  ⊘\n↯  ⋮  ⌁  ∴  ⫸',signal:'INDEFINITE',source:'ILLEGIBLE',residue:'NaN',status:'FAILED PARSE',log:'Pronunciation required; transcription impossible.'},
-{title:'UNREADING',cue:'At: “Read the unread.”',glyph:'UN—READ\nUN—SAID\nUN—SOUND',signal:'RECURSIVE',source:'READER',residue:'∞ / 0',status:'LOOPING',log:'Reader and object exchange positions.'},
+{title:'CALIBRATION',cue:'Before: “This is not a text.”',glyph:'∅',signal:'UNDETERMINED',source:'NOT FOUND',residue:'0.000',status:'STANDBY',log:'Instrument awaiting language. Metric without words.'},
+{title:'MEASUREMENT',cue:'At: “The object under investigation is a sentence.”',glyph:'│  ─  │  ─  ∅  ─  │',signal:'0.000 ± ∞',source:'SENTENCE',residue:'0.001',status:'MEASURING',log:'Sentence without measurable boundaries. Curvature: zero.'},
+{title:'DETECTION',cue:'At: “Here is where we have detected a signal.”',glyph:'SIGNAL\n    / / /\nSOURCE ?',signal:'SNR 0 dB',source:'ABSENT',residue:'0.013',status:'OBSERVING',log:'Signal detected; source unresolved. Signal and noise equal.'},
+{title:'CONTRADICTION',cue:'At: “Now that we have detected a source…”',glyph:'S I G N A L\nS I G N\nS I G H\nS I\nS S S S S',signal:'LOST',source:'BEYOND HORIZON',residue:'0.089',status:'UNSTABLE',log:'Source behind horizon. Edit distance: 2, 1, 2, ?'},
+{title:'UNPRONOUNCEABLE',cue:'At: “The reconstructed characters cannot be pronounced.”',glyph:'⫷  ∿  ⟟  ╳  ⊘\n↯  ⋮  ⌁  ∴  ⫸',signal:'INDEFINITE',source:'ILLEGIBLE',residue:'NaN',status:'FAILED PARSE',log:'Pronunciation required; transcription impossible.'},
+{title:'AXIOMS / UNREADING',cue:'At: “Three axioms. Violated.”',glyph:'d(x,x) ≠ 0\nd(x,y) ≠ d(y,x)\nd(x,z) > d(x,y) + d(y,z)',signal:'RECURSIVE',source:'READER',residue:'∞ / 0',status:'LOOPING',log:'Metric axioms violated. Reader and object exchange positions.'},
 {title:'PHONETIC COLLAPSE',cue:'At: “Re—re—re—”',glyph:'RE RE RE\nRA RA RA\nRRRRRRR\n—',signal:'NOISE',source:'UNKNOWN',residue:'ERR',status:'DEGRADING',log:'Language reduced to phonetic residue.'},
 {title:'NULL TRANSMISSION',cue:'At: “Nothing has been transmitted.”',glyph:'',signal:'ZERO',source:'ABSENT',residue:'0 / 0',status:'COMPLETE',log:'Nothing transmitted. Nothing received.'},
 {title:'REPEAT',cue:'At the whispered: “Repeat.” Press SPACE once more.',glyph:'∅',signal:'UNDETERMINED',source:'NOT FOUND',residue:'TRACE DETECTED',status:'RESTART PENDING',log:'Previous experiment cannot be erased.'}
@@ -244,5 +244,61 @@ function drawScope(now){
 }
 function animate(now){requestAnimationFrame(animate);if(now-lastFrame<32)return;lastFrame=now;drawNoise(now);drawScope(now)}
 window.addEventListener('resize',resizeVisuals);resizeVisuals();requestAnimationFrame(animate);
-el('score').textContent=`00  This is not a poem. This is a measurement.\n    The object under observation is a sentence.\n    The sentence has no beginning.\n    The sentence has no measurable end.\n    Its mass is approximately zero. Its silence is increasing.\n\n02  We have detected a signal. We have not detected a source.\n03  We have detected a source. We have lost the signal.\n    Signal. Sign. Sigh. Sigh. Si. Sssss.\n\n04  The following characters cannot be pronounced.\n    Therefore, they must be pronounced.\n    The following words cannot be written.\n    Therefore, they have already been written.\n    Un—read. Un—said. Un—seen. Un—sound.\n\n05  Read the unread. Unread the reader.\n    Read the unreader. Unread the reading.\n06  Re—re—re— Ra—ra—ra— Rrrrrrrrr—\n    [abrupt silence]\n\n07  The experiment was successful.\n    Nothing has been transmitted.\n    [long pause]\n    Nothing has been received.\n08  [whisper] Repeat.`;render();
+el('score').textContent=`00  This is not a text. This is a measurement of.
+    Not of a text. Not of being a text.
+    An experiment with metrics without words.
+    For: the metric is independent of the content of words.
+    A metric space is not a space with words.
+    It is a set of signs and a rule for the distance between them.
+    In the discrete metric, every word is exactly one step
+    from every other. This is where language ends.
+    This is where we begin.
+    Noise is a rule that can only be written in full.
+
+01  The object under investigation is a sentence. A hidden one.
+    Hidden by the language it was originally written in.
+    This sentence has no beginning. It has no measurable end.
+    Its mass is approximately zero and so is the curvature
+    of the text it was probably drawn from.
+    Its increasing silence is a point-like sign, expanding.
+    A point contains every frequency.
+    A point, heard, is white noise.
+
+02  Here is where we have detected a signal.
+    We have not detected a source.
+    SNR: 0 dB. Signal and noise are now the same size.
+
+03  Now that we have detected a source, we have lost the signal.
+    The source lies behind its own horizon.
+    Its last words arrive stretched, redshifted beyond hearing.
+    Signal. (d = 2) Sign. (d = 1) Sigh. (d = 2) Si. (d = ?) Sssss.
+
+04  The reconstructed characters cannot be pronounced.
+    Therefore, they must be pronounced.
+    The following words cannot be written.
+    Therefore, they have already been written.
+    Un—read. Un—said. Un—seen. Un—sound.
+
+05  Three axioms. Violated.
+    The distance from a word to itself is zero.
+    Read it twice. The distance is not zero.
+    The distance from reading to unreading
+    is not the distance from unreading to reading.
+    Passing through a third word should never be shorter.
+    Pass through silence: it is.
+
+    The reader reads the unread. The reader unreads the read.
+    The unreader reads the read.
+    Unread the reader. Read the unreader. Unread the reading.
+
+06  Re—re—re— Ra—ra—ra— Rrrrrrrrr—
+    [abrupt silence]
+
+07  The experiment was successful. Nothing has been transmitted.
+    The meaning is lost. The loss of transmission is the meaning.
+    [long pause]
+    Nothing has been received.
+
+08  …
+    [whisper] Repeat. And: repeat`;render();
 </script></body></html>
