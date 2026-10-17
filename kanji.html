@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>字</title>
+
+<style>
+    html, body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        overflow: hidden;
+    }
+
+    canvas {
+        display: block;
+        width: 100vw;
+        height: 100vh;
+    }
+</style>
+</head>
+
+<body>
+
+<canvas id="canvas"></canvas>
+
+<script>
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+let W, H;
+let particles = [];
+
+const PARTICLE_SIZE = 1.05;
+const DENSITY = 3;
+const DURATION = 19000;
+
+let startTime = performance.now();
+
+function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    createParticles();
+}
+
+function createParticles() {
+
+    const source = document.createElement("canvas");
+    const sctx = source.getContext("2d");
+
+    source.width = W;
+    source.height = H;
+
+    /*
+     * The source character.
+     * 字 is deliberately treated as a graphic unit rather than
+     * as a linguistic object.
+     */
+    const size = Math.min(W, H) * 0.34;
+
+    sctx.fillStyle = "black";
+    sctx.textAlign = "center";
+    sctx.textBaseline = "middle";
+    sctx.font = `${size}px serif`;
+
+    sctx.fillText("字", W / 2, H / 2);
+
+    const image = sctx.getImageData(0, 0, W, H);
+    const data = image.data;
+
+    const sourcePoints = [];
+
+    for (let y = 0; y < H; y += DENSITY) {
+        for (let x = 0; x < W; x += DENSITY) {
+
+            const i = (y * W + x) * 4;
+            const alpha = data[i + 3];
+
+            if (alpha > 100) {
+                sourcePoints.push({
+                    x: x,
+                    y: y
+                });
+            }
+        }
+    }
+
+    /*
+     * Target: an irregular vegetal structure.
+     * It is deliberately not a recognisable botanical drawing.
+     */
+    const targetPoints = [];
+
+    const cx = W / 2;
+    const base = H * 0.73;
+    const top = H * 0.25;
+
+    // Main stem
+    for (let i = 0; i < sourcePoints.length * 0.28; i++) {
+
+        const t = Math.random();
+
+        targetPoints.push({
+            x: cx
+                + Math.sin(t * 8) * W * 0.018
+                + (Math.random() - 0.5) * 2,
+
+            y: base - t * (base - top)
+        });
+    }
+
+    // Branches
+    const branches = 13;
+
+    for (let b = 0; b < branches; b++) {
+
+        const y = base - (b / branches) * (base - top);
+        const direction = b % 2 === 0 ? -1 : 1;
+
+        const length =
+            W * (0.05 + Math.random() * 0.14);
+
+        const points = Math.floor(
+            sourcePoints.length * 0.035
+        );
+
+        for (let i = 0; i < points; i++) {
+
+            const t = i / points;
+
+            targetPoints.push({
+                x:
+                    cx
+                    + direction * length * t
+                    + Math.sin(t * 12) * 8
+                    + (Math.random() - 0.5) * 3,
+
+                y:
+                    y
+                    - t * H * (0.08 + Math.random() * 0.08)
+                    + (Math.random() - 0.5) * 5
+            });
+        }
+    }
+
+    // Small peripheral vegetal traces
+    while (targetPoints.length < sourcePoints.length) {
+
+        const angle = Math.random() * Math.PI * 2;
+        const radius = Math.random() * W * 0.17;
+
+        const x =
+            cx
+            + Math.cos(angle) * radius;
+
+        const y =
+            H * 0.48
+            + Math.sin(angle) * radius * 0.8;
+
+        targetPoints.push({ x, y });
+    }
+
+    /*
+     * Pair source and target points.
+     */
+    particles = [];
+
+    for (let i = 0; i < sourcePoints.length; i++) {
+
+        const s = sourcePoints[i];
+        const t = targetPoints[i % targetPoints.length];
+
+        particles.push({
+
+            x: s.x,
+            y: s.y,
+
+            sx: s.x,
+            sy: s.y,
+
+            tx: t.x,
+            ty: t.y,
+
+            delay: Math.random() * 0.22,
+
+            drift:
+                (Math.random() - 0.5) * W * 0.08,
+
+            phase:
+                Math.random() * Math.PI * 2
+        });
+    }
+
+    startTime = performance.now();
+}
+
+function ease(t) {
+
+    // Very slow, almost imperceptible movement.
+    return t * t * (3 - 2 * t);
+}
+
+function draw(time) {
+
+    ctx.clearRect(0, 0, W, H);
+
+    const elapsed =
+        (time - startTime) / DURATION;
+
+    particles.forEach(p => {
+
+        let t = Math.max(
+            0,
+            Math.min(
+                1,
+                (elapsed - p.delay) /
+                (1 - p.delay)
+            )
+        );
+
+        t = ease(t);
+
+        /*
+         * A small lateral displacement keeps the movement
+         * organic without turning it into an animation effect.
+         */
+        const drift =
+            Math.sin(
+                p.phase +
+                t * Math.PI * 2
+            ) *
+            p.drift *
+            t *
+            (1 - t);
+
+        const x =
+            p.sx +
+            (p.tx - p.sx) * t +
+            drift;
+
+        const y =
+            p.sy +
+            (p.ty - p.sy) * t;
+
+        ctx.fillStyle = "black";
+
+        ctx.fillRect(
+            x,
+            y,
+            PARTICLE_SIZE,
+            PARTICLE_SIZE
+        );
+    });
+
+    requestAnimationFrame(draw);
+}
+
+window.addEventListener("resize", resize);
+
+resize();
+requestAnimationFrame(draw);
+
+</script>
+
+</body>
+</html>
